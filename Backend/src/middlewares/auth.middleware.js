@@ -38,24 +38,6 @@ export const authenticateBuyer = async (req, res, next) => {
   }
 };
 
-export const authenticateSeller = async (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-  try {
-    const decoded = jwt.verify(token, config.JWT_SECRET);
-    const user = userModel.findById(decoded.id);
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
-    if (user.role !== "seller")
-      return res.status(401).json({ message: "Unauthorized" });
-    req.user = user;
-    next();
-  } catch (error) {
-    console.log(error);
-    res.status(401).json({ message: "Invalid Token" });
-  }
-};
-
 export const authenticateAdmin = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) return res.status(401).json({ message: "Unauthorized" });

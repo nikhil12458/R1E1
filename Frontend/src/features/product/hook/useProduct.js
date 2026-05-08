@@ -4,8 +4,9 @@ import {
   getAllProducts,
   getProductById,
   getSellerProducts,
+  deleteProduct
 } from "../service/product.api";
-import { setProducts, setSellerProducts } from "../state/product.slice";
+import { setProducts, setSellerProducts, removeSellerProduct } from "../state/product.slice";
 
 export const useProduct = () => {
   const dispatch = useDispatch();
@@ -31,10 +32,17 @@ export const useProduct = () => {
     return data.product;
   }
 
+  async function handleDeleteProduct(productId){
+    const data = await deleteProduct(productId);
+    dispatch(removeSellerProduct(productId));
+    return data.product;
+  }
+
   return {
     handleCreateProduct,
     handleGetSellerProducts,
     handleGetAllProducts,
     handleGetProductById,
+    handleDeleteProduct,
   };
 };

@@ -1,5 +1,5 @@
 import express from "express";
-import { authenticateSeller, authenticateAdmin, authenticateUser, authorizeRoles, checkProductAccess } from "../middlewares/auth.middleware.js";
+import { authenticateAdmin, authenticateUser, authorizeRoles, checkProductAccess } from "../middlewares/auth.middleware.js";
 import multer from "multer";
 import {createProductValidator} from "../validator/product.validator.js"
 import { addProductVariant, createProduct, deleteProduct, deleteProductVariant, getAllProducts, getAllProductsAdmin, getProductDetail, getSellerProducts } from "../controllers/product.controller.js";
@@ -27,11 +27,11 @@ router.post("/create", authenticateUser, authorizeRoles("seller", "admin"), uplo
   @route GET /api/products/seller
   @desc  Get all products of seller
   @access Private (Seller)
-  @middleware authenticateSeller
+  @middleware authenticateUser, authorizeRoles("seller")
   @controller getSellerProducts
 */
 
-router.get("/seller", authenticateSeller, getSellerProducts);
+router.get("/seller", authenticateUser, authorizeRoles("seller"), getSellerProducts);
 
 /*
   @route GET /api/products/allSellerProductsAdmin
