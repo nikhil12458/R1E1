@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #fff8f6;
+  --color-on-surface: #261816;
+  --color-on-surface-variant: #5a413d;
+  --color-surface-variant: #f7ddd8;
+  --color-surface-dim: #eed4d0;
+  --color-surface-bright: #fff8f6;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fff0ee;
+  --color-surface-container: #ffe9e6;
+  --color-surface-container-high: #fde2de;
+  --color-surface-container-highest: #f7ddd8;
+  
+  --color-primary: #570000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #800000;
+  --color-on-primary-container: #ff8371;
+  --color-primary-fixed: #ffdad4;
+  --color-primary-fixed-dim: #ffb4a8;
+  --color-on-primary-fixed: #410000;
+  --color-on-primary-fixed-variant: #8f0f07;
+
+  --color-secondary: #566338;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d7e6b0;
+  --color-on-secondary-container: #5a683c;
+  
+  --color-tertiary: #342400;
+  --color-tertiary-container: #503800;
+  
+  --color-outline: #8e706c;
+  --color-outline-variant: #e2bfb9;
+  
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+
+  --font-montserrat: "Montserrat", sans-serif;
+  --font-playfair: "Playfair Display", serif;
+
+  /* Vastraa Typography System */
+  --font-size-display-lg: 48px;
+  --font-size-headline-lg: 32px;
+  --font-size-headline-md: 24px;
+  --font-size-body-lg: 18px;
+  --font-size-body-md: 16px;
+  --font-size-label-sm: 12px;
+}
+
+.textile-texture {
+  background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuB0Cz6K3jaoATNwJC4GMdq2Z6KshvTp3wie7RGPbist-Ek7q3CLn0EjRcMHWaFFq0U5n-rzj9Lnpw3IVINXQ_kGJ3u0e-zsYyCyP6iDBhRu_ZmEaT9Aj9_gcjm_OBqPem-XQ2O6-gUE-esSiy4vb9nFVGVzLqOenIvzenacaxbOs2ONGe-9FnX-8MV6f9r3jJRWqg44-5lDl7VrVmnjU3yTRyDZ9Ua-5vfjoNwCLCeKA_DLiM_PG33XhKY-5QPmzw_x9UMNRlCBjpyc);
+  background-repeat: repeat;
+}
+
+.motif-corner {
+  opacity: 0.15;
+  pointer-events: none;
+}

@@ -161,12 +161,18 @@ export async function deleteProductVariant(req, res) {
   if (!product) {
     return res.status(404).json({
       success: false,
-      message: "Product not found",
+      message: "You are not authorized to delete variant from this product",
     });
   }
 
   const variant = product.variants.id(variantId);
-  variant.remove();
+  if(!variant){
+    return res.status(404).json({
+      success: false,
+      message: "Variant not found",
+    });
+  }
+  await variant.deleteOne();
 
   await product.save();
 

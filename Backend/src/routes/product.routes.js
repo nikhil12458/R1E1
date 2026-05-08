@@ -14,14 +14,14 @@ const upload = multer({
 const router = express.Router();
 
 /*
-  @route POST /api/products
+  @route POST /api/products/create
   @desc  Create a new product
   @access Private (Seller, Admin)
   @middleware authenticateUser, authorizeRoles("seller", "admin"), upload.array("images", 5), createProductValidator
   @controller createProduct
  */
 
-router.post("/", authenticateUser, authorizeRoles("seller", "admin"), upload.array("images", 5), createProductValidator, createProduct);
+router.post("/create", authenticateUser, authorizeRoles("seller", "admin"), upload.array("images", 5), createProductValidator, createProduct);
 
 /*
   @route GET /api/products/seller
