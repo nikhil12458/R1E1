@@ -19,6 +19,9 @@ const userSchema = new mongoose.Schema(
     },
     fullname: { type: String, required: true },
     googleId: { type: String, unique: true },
+    company: {type: String, required: function(){
+        return this.role === "seller" || this.role === "admin";
+    }},
     addresses: [addressSchema],
   },
   { timestamps: true },
