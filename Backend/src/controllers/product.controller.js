@@ -159,10 +159,7 @@ export async function addProductVariant(req, res) {
 export async function deleteProductVariant(req, res) {
   const { productId, variantId } = req.params;
 
-  const product = await productModel.findOne({
-    _id: productId,
-    seller: req.user._id,
-  });
+  const product = req.product;
 
   if (!product) {
     return res.status(404).json({
@@ -183,25 +180,21 @@ export async function deleteProductVariant(req, res) {
   });
 }
 
-export async function deleteProduct(req, res){
-  const {productId} = req.params;
-  const seller = req.user;
+export async function deleteProduct(req, res) {
+  const product = req.product;
 
-  const deletedProduct = await productModel.findOneAndDelete({
-    _id: productId,
-    seller: seller._id
-  })
-
-  if(!deletedProduct){
+  if (!product) {
     return res.status(404).json({
       success: false,
-      message: "Product not found"
-    })
+      message: "You are not authorized to delete this product",
+    });
   }
+
+  await product.deleteOne();
 
   return res.status(200).json({
     success: true,
     message: "Product deleted successfully",
-    deletedProduct
-  })
+    deletedProduct: product,
+  });
 }

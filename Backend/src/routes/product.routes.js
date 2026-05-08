@@ -1,8 +1,8 @@
 import express from "express";
-import { authenticateSeller, authenticateAdmin } from "../middlewares/auth.middleware.js";
+import { authenticateSeller, authenticateAdmin, authenticateUser, authorizeRoles, checkProductAccess } from "../middlewares/auth.middleware.js";
 import multer from "multer";
 import {createProductValidator} from "../validator/product.validator.js"
-import { addProductVariant, createProduct, deleteProduct, deleteProductVariant, getAllProducts, getAllProductsAdmin, getSellerProducts } from "../controllers/product.controller.js";
+import { addProductVariant, createProduct, deleteProduct, deleteProductVariant, getAllProducts, getAllProductsAdmin, getProductDetail, getSellerProducts } from "../controllers/product.controller.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -74,21 +74,21 @@ router.post("/:productId/variants", authenticateSeller, upload.array("variantIma
 /*
     @route DELETE /api/products/:productId/variants/:variantId/delete
     @desc  Delete variant from product
-    @access Private (Seller)
-    @middleware authenticateSeller
+    @access Private (Seller, Admin)
+    @middleware authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess
     @controller deleteProductVariant
 */
 
-router.delete("/:productId/variants/:variantId/delete", authenticateSeller, deleteProductVariant) 
+router.delete("/:productId/variants/:variantId/delete", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, deleteProductVariant) 
 
 /*
     @route DELETE /api/products/:productId/delete
     @desc  Delete product
-    @access Private (Seller)
-    @middleware authenticateSeller
+    @access Private (Seller, Admin)
+    @middleware authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess
     @controller deleteProduct
 */
 
-router.delete("/:productId/delete", authenticateSeller, deleteProduct)
+router.delete("/:productId/delete", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, deleteProduct)
 
 export default router;
