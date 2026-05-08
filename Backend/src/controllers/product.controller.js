@@ -105,15 +105,12 @@ export async function getProductDetail(req, res) {
 export async function addProductVariant(req, res) {
   const { productId } = req.params;
 
-  const product = await productModel.findOne({
-    _id: productId,
-    seller: req.user._id,
-  });
+  const product = req.product;
 
   if (!product) {
     return res.status(404).json({
       success: false,
-      message: "Product not found",
+      message: "You are not authorized to add variant to this product",
     });
   }
 

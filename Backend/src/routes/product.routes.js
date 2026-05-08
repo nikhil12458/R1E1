@@ -16,12 +16,12 @@ const router = express.Router();
 /*
   @route POST /api/products
   @desc  Create a new product
-  @access Private (Seller)
-  @middleware authenticateSeller, upload.array("images", 5), createProductValidator
+  @access Private (Seller, Admin)
+  @middleware authenticateUser, authorizeRoles("seller", "admin"), upload.array("images", 5), createProductValidator
   @controller createProduct
  */
 
-router.post("/", authenticateSeller, upload.array("images", 5), createProductValidator, createProduct);
+router.post("/", authenticateUser, authorizeRoles("seller", "admin"), upload.array("images", 5), createProductValidator, createProduct);
 
 /*
   @route GET /api/products/seller
@@ -64,12 +64,12 @@ router.get("/detail/:id", getProductDetail)
 /*
     @route POST /api/products/:productId/variants
     @desc  Add variant to product
-    @access Private (Seller)
-    @middleware authenticateSeller, upload.array("variantImages", 4)
+    @access Private (Seller, Admin)
+    @middleware authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, upload.array("variantImages", 4)
     @controller addProductVariant
 */
 
-router.post("/:productId/variants", authenticateSeller, upload.array("variantImages", 4), addProductVariant)
+router.post("/:productId/variants", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, upload.array("variantImages", 4), addProductVariant)
 
 /*
     @route DELETE /api/products/:productId/variants/:variantId/delete
