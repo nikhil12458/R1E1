@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useProduct } from "../hook/useProduct";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -10,6 +10,8 @@ const ProductDetail = () => {
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [activeImage, setActiveImage] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -194,15 +196,31 @@ const ProductDetail = () => {
                   </p>
                 )}
                 
-                <div className="flex gap-4">
+                <div className="flex items-center gap-3">
                   <button
                     disabled={!selectedVariant}
-                    className="flex-1 bg-[#570000] text-white py-5 rounded-full font-playfair text-lg tracking-widest hover:bg-[#800000] transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none shadow-xl shadow-primary/20 flex items-center justify-center gap-3"
+                    className="flex-[2] h-14 bg-[#570000] text-white rounded-full font-montserrat text-[10px] font-bold tracking-[0.2em] hover:bg-[#800000] transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-20 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-primary/20 flex items-center justify-center gap-3"
                   >
-                    <span className="material-symbols-outlined">shopping_bag</span>
+                    <span className="material-symbols-outlined text-xl">shopping_bag</span>
                     ADD TO CART
                   </button>
-                  <button className="w-16 h-16 rounded-full border border-[#8e706c]/20 flex items-center justify-center text-[#570000] hover:bg-[#570000] hover:text-white transition-all">
+                  <button 
+                    disabled={!selectedVariant}
+                    onClick={() => {
+                      if (selectedVariant?.images?.[0]?.url) {
+                        navigate("/ai-tryon", { 
+                          state: { 
+                            garmentUrl: selectedVariant.images[0].url 
+                          } 
+                        });
+                      }
+                    }}
+                    className="flex-[2] h-14 border border-[#570000] text-[#570000] rounded-full font-montserrat text-[10px] font-bold tracking-[0.2em] hover:bg-[#570000] hover:text-white transition-all transform hover:scale-[1.02] active:scale-95 disabled:opacity-20 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-3"
+                  >
+                    <span className="material-symbols-outlined text-xl">flare</span>
+                    VIRTUAL TRY-ON
+                  </button>
+                  <button className="flex-shrink-0 w-14 h-14 rounded-full border border-[#8e706c]/20 flex items-center justify-center text-[#570000] hover:bg-[#570000] hover:text-white transition-all active:scale-90 shadow-sm">
                     <span className="material-symbols-outlined">favorite</span>
                   </button>
                 </div>

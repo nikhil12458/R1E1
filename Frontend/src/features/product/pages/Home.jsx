@@ -45,14 +45,6 @@ const Home = () => {
 
       {/* Hero Section */}
       <section className="relative h-[80vh] overflow-hidden flex items-center">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1589363423719-7561f22e707e?q=80&w=2000&auto=format&fit=crop" 
-            className="w-full h-full object-cover opacity-80"
-            alt="Handloom Texture"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#fff8f6] via-transparent to-transparent"></div>
-        </div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-6">
           <div className="max-w-2xl space-y-8 animate-in fade-in slide-in-from-left-10 duration-1000">

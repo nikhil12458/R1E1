@@ -8,6 +8,7 @@ import SellerProductDetail from "../features/product/pages/SellerProductDetail";
 import Home from "../features/product/pages/Home";
 import ProductDetail from "../features/product/pages/ProductDetail";
 import MainLayout from "../components/layout/MainLayout";
+import AITryOnPage from "../features/ai/pages/AITryOnPage";
 
 export const routes = createBrowserRouter([
   {
@@ -56,4 +57,8 @@ export const routes = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
+  {
+  path: "/ai-tryon",
+  element: <AITryOnPage />,
+}
 ]);
