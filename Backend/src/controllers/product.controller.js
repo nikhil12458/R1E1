@@ -102,57 +102,6 @@ export async function getProductDetail(req, res) {
   });
 }
 
-export async function addProductVariant(req, res) {
-  const { productId } = req.params;
-
-  const product = req.product;
-
-  if (!product) {
-    return res.status(404).json({
-      success: false,
-      message: "You are not authorized to add variant to this product",
-    });
-  }
-
-  const files = req.files;
-  const images = [];
-  if (files || files.length !== 0) {
-    (
-      await Promise.all(
-        files.map(async (file) => {
-          const image = await uploadFile({
-            buffer: file.buffer,
-            fileName: file.originalname,
-          });
-          return image;
-        }),
-      )
-    ).map((image) => images.push(image));
-  }
-
-  const price = req.body.priceAmount;
-  const stock = req.body.stock;
-  const attributes = JSON.parse(req.body.attributes || "{}");
-
-  product.variants.push({
-    images,
-    price: {
-      amount: price || product.price.amount,
-      currency: req.body.priceCurrency || product.price.currency,
-    },
-    stock,
-    attributes,
-  });
-
-  await product.save();
-
-  return res.status(200).json({
-    message: "Product variant added successfully",
-    success: true,
-    product,
-  });
-}
-
 export async function deleteProductVariant(req, res) {
   const { productId, variantId } = req.params;
 
@@ -166,7 +115,7 @@ export async function deleteProductVariant(req, res) {
   }
 
   const variant = product.variants.id(variantId);
-  if(!variant){
+  if (!variant) {
     return res.status(404).json({
       success: false,
       message: "Variant not found",
@@ -199,5 +148,103 @@ export async function deleteProduct(req, res) {
     success: true,
     message: "Product deleted successfully",
     deletedProduct: product,
+  });
+}
+
+export async function addProductVariant(req, res) {
+  const { productId } = req.params;
+  const { priceAmount, priceCurrency, stock } = req.body;
+  const attributes = JSON.parse(req.body.attributes || "{}");
+
+  const product = req.product;
+
+  if (!product) {
+    return res.status(404).json({
+      success: false,
+      message: "You are not authorized to add variant to this product",
+    });
+  }
+
+  const files = req.files;
+  const images = [];
+  if (files && files.length !== 0) {
+    (
+      await Promise.all(
+        files.map(async (file) => {
+          const image = await uploadFile({
+            buffer: file.buffer,
+            fileName: file.originalname,
+          });
+          return image;
+        }),
+      )
+    ).map((image) => images.push(image));
+  }
+
+  product.variants.push({
+    images,
+    price: {
+      amount: priceAmount || product.price.amount,
+      currency: priceCurrency || product.price.currency,
+    },
+    stock,
+    attributes,
+  });
+
+  await product.save();
+
+  return res.status(200).json({
+    message: "Product variant added successfully",
+    success: true,
+    product,
+  });
+}
+
+export async function updateProductVariant(req, res) {
+  const product = req.product;
+
+  const { variantId } = req.params;
+
+  const { priceAmount, priceCurrency, stock } = req.body;
+
+  const variant = product.variants.id(variantId);
+
+  if (!variant) {
+    return res.status(404).json({
+      success: false,
+      message: "Variant not found",
+    });
+  }
+
+  // update only provided fields
+
+  if (priceAmount !== undefined) {
+    variant.price.amount = priceAmount;
+  }
+
+  if (priceCurrency !== undefined) {
+    variant.price.currency = priceCurrency;
+  }
+
+  if (stock !== undefined) {
+    variant.stock = stock;
+  }
+
+  // merge attributes instead of replacing
+
+  if (req.body.attributes) {
+    const newAttributes = JSON.parse(req.body.attributes);
+
+    for (const [key, value] of Object.entries(newAttributes)) {
+      variant.attributes.set(key, value);
+    }
+  }
+
+  await product.save();
+
+  return res.status(200).json({
+    success: true,
+    message: "Product variant updated successfully",
+    product,
   });
 }

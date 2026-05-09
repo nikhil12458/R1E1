@@ -2,7 +2,7 @@ import express from "express";
 import { authenticateAdmin, authenticateUser, authorizeRoles, checkProductAccess } from "../middlewares/auth.middleware.js";
 import multer from "multer";
 import {createProductValidator} from "../validator/product.validator.js"
-import { addProductVariant, createProduct, deleteProduct, deleteProductVariant, getAllProducts, getAllProductsAdmin, getProductDetail, getSellerProducts } from "../controllers/product.controller.js";
+import { addProductVariant, createProduct, deleteProduct, deleteProductVariant, getAllProducts, getAllProductsAdmin, getProductDetail, getSellerProducts, updateProductVariant } from "../controllers/product.controller.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -90,5 +90,19 @@ router.delete("/:productId/variants/:variantId/delete", authenticateUser, author
 */
 
 router.delete("/:productId/delete", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, deleteProduct)
+
+/*
+    @route POST /api/products/:productId/variants
+    @desc  Add variant to product
+    @access Private (Seller, Admin)
+    @middleware authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, upload.array("variantImages", 4)
+    @controller addProductVariant
+*/
+
+router.post("/:productId/variants", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, upload.array("variantImages", 4), addProductVariant)
+
+router.delete("/:productId/variants/:variantId/delete", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, deleteProductVariant)
+
+router.patch("/:productId/variants/:variantId/update", authenticateUser, authorizeRoles("seller", "admin"), checkProductAccess, updateProductVariant)
 
 export default router;

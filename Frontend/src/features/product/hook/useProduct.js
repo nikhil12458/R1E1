@@ -4,9 +4,17 @@ import {
   getAllProducts,
   getProductById,
   getSellerProducts,
-  deleteProduct
+  deleteProduct,
+  addProductVariant,
+  deleteProductVariant,
+  updateProductVariant,
 } from "../service/product.api";
-import { setProducts, setSellerProducts, removeSellerProduct } from "../state/product.slice";
+import {
+  setProducts,
+  setSellerProducts,
+  removeSellerProduct,
+  setSelectedProduct,
+} from "../state/product.slice";
 
 export const useProduct = () => {
   const dispatch = useDispatch();
@@ -29,13 +37,38 @@ export const useProduct = () => {
 
   async function handleGetProductById(productId) {
     const data = await getProductById(productId);
+    dispatch(setSelectedProduct(data.product));
     return data.product;
   }
 
-  async function handleDeleteProduct(productId){
+  async function handleDeleteProduct(productId) {
     const data = await deleteProduct(productId);
     dispatch(removeSellerProduct(productId));
     return data.product;
+  }
+
+  async function handleAddProductVariant(productId, formData) {
+    const data = await addProductVariant(productId, formData);
+    if (data.success) {
+      dispatch(setSelectedProduct(data.product));
+    }
+    return data;
+  }
+
+  async function handleDeleteProductVariant(productId, variantId) {
+    const data = await deleteProductVariant(productId, variantId);
+    if (data.success) {
+      dispatch(setSelectedProduct(data.product));
+    }
+    return data;
+  }
+
+  async function handleUpdateProductVariant(productId, variantId, formData) {
+    const data = await updateProductVariant(productId, variantId, formData);
+    if (data.success) {
+      dispatch(setSelectedProduct(data.product));
+    }
+    return data;
   }
 
   return {
@@ -44,5 +77,8 @@ export const useProduct = () => {
     handleGetAllProducts,
     handleGetProductById,
     handleDeleteProduct,
+    handleAddProductVariant,
+    handleDeleteProductVariant,
+    handleUpdateProductVariant,
   };
 };
